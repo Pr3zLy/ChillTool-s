@@ -1,4 +1,5 @@
 import translations from '../../i18n/translations.js';
+import { injectToBody } from '../../core/dom.js';
 
 const REVIEW_URL = 'https://chromewebstore.google.com/detail/pdkdjcijjkhhkfdfbdgdfdgobnliphjd/reviews';
 const REVIEW_SNOOZE_MS = 30 * 24 * 60 * 60 * 1000;
@@ -78,7 +79,7 @@ export function showReviewPrompt() {
     btnRow.append(later, ok);
     box.append(title, body, btnRow);
     overlay.append(box);
-    document.body.append(overlay);
+    injectToBody(overlay);
 
     later.addEventListener('click', () => {
         localStorage.setItem('reviewPromptSnoozeUntil', String(Date.now() + REVIEW_SNOOZE_MS));

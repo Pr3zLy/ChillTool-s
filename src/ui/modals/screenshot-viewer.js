@@ -19,6 +19,7 @@ export function setDeps(deps) {
 }
 
 export function downloadImage(imageSrc, fileName) {
+    if (!document.body) return;
     const link = document.createElement('a');
     link.href = imageSrc;
     link.download = fileName || 'screenshot.png';
