@@ -1452,6 +1452,18 @@
     banBtn.style.padding = isMobile2() ? "10px 12px" : "8px 12px";
     banBtn.style.cursor = "pointer";
     banBtn.style.fontSize = isMobile2() ? "16px" : "inherit";
+    banBtn.style.position = "absolute";
+    banBtn.style.top = "10px";
+    banBtn.style.left = "10px";
+    banBtn.style.right = "auto";
+    banBtn.style.width = "40px";
+    banBtn.style.height = "40px";
+    banBtn.style.borderRadius = "50%";
+    banBtn.style.padding = "0";
+    banBtn.style.display = "flex";
+    banBtn.style.alignItems = "center";
+    banBtn.style.justifyContent = "center";
+    banBtn.style.zIndex = "100";
     banBtn.title = _translations[_getLang2()]?.ban ?? "";
     banBtn.disabled = true;
     banBtn.addEventListener("click", function() {
@@ -1469,7 +1481,16 @@
         restartConnection();
       }
     });
-    leftButtons.appendChild(banBtn);
+    function attachBanBtn() {
+      const remoteContainer = document.querySelector(".videoWrapper.remote.noSelect") || document.querySelector(".videoWrapper.remote");
+      if (remoteContainer && !remoteContainer.contains(banBtn)) {
+        remoteContainer.style.position = "relative";
+        remoteContainer.appendChild(banBtn);
+      }
+    }
+    attachBanBtn();
+    const banBtnObserver = new MutationObserver(attachBanBtn);
+    banBtnObserver.observe(document.documentElement, { childList: true, subtree: true });
     const bannedListBtn = document.createElement("button");
     bannedListBtn.id = "chillBannedListBtn";
     bannedListBtn.innerHTML = '<i class="fas fa-list"></i>';
@@ -4093,7 +4114,7 @@
     btnRow.append(later, ok);
     box.append(title, body, btnRow);
     overlay.append(box);
-    document.body.append(overlay);
+    injectToBody(overlay);
     later.addEventListener("click", () => {
       localStorage.setItem("reviewPromptSnoozeUntil", String(Date.now() + REVIEW_SNOOZE_MS));
       overlay.remove();
